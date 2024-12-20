@@ -20,5 +20,18 @@ namespace AcademyLink.Persistence.Repositories
             var matches = _dbContext.Students.Any(e => (e.FirstName + " " + e.LastName).Equals(studentName) && e.Email.Equals(email) && e.StudentId != studentId);
             return Task.FromResult(matches);
         }
+
+        public Task<bool> StudentIsInUseCheck(int studentId)
+        {
+            var exists = false;
+            var studentEnrolledCourse = _dbContext.StudensEnrolledCourses.Where(e => e.StudentId == studentId);
+
+            if (studentEnrolledCourse.Count() > 0)
+            {
+                exists = true;
+            }
+
+            return Task.FromResult(exists);
+        }
     }
 }

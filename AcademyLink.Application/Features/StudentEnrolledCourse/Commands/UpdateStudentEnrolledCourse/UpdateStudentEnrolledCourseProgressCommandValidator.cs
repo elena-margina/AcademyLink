@@ -36,6 +36,14 @@ namespace AcademyLink.Application.Features.StudentEnrolledCourse.Commands.Update
                 .MustAsync(StudentInCourseExistsCheck)
                 .WithMessage("The student is not enrolled in this course.");
 
+            RuleFor(e => e)
+                .Must(e => !(e.Progress == 100 && e.Status != Domain.Enums.EnrollmentStatus.Completed)).WithMessage("If the pgrogress is 100% then the status must be Completed.");
+
+            RuleFor(e => e)
+                .Must(e => !(e.Progress != 100 && e.Status == Domain.Enums.EnrollmentStatus.Completed)).WithMessage("If the status is Completed then the pgrogress must be 100%.");
+
+            RuleFor(e => e.Progress)
+                .Must(e => e <= 100).WithMessage("{PropertyName} must be less or equal to 100%.");
         }
 
         private async Task<bool> StatusCheck(UpdateStudentEnrolledCourseProgressCommand e, CancellationToken token)

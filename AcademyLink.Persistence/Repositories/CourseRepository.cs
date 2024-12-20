@@ -1,6 +1,5 @@
 ﻿using AcademyLink.Application.Contracts.Persistence;
 using AcademyLink.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace AcademyLink.Persistence.Repositories
 {
@@ -20,6 +19,19 @@ namespace AcademyLink.Persistence.Repositories
         {
             var matches = _dbContext.Courses.Any(e => (e.Name).Equals(name) && e.CourseId != courseId);
             return Task.FromResult(matches);
+        }
+
+        public Task<bool> CourseIsInUseCheck(int courseId)
+        {
+            var exists = false;
+            var studentEnrolledCourse = _dbContext.StudensEnrolledCourses.Where(e => e.CourseId == courseId);
+           
+            if (studentEnrolledCourse.Count() > 0)
+            {
+                exists = true;
+            }
+
+            return Task.FromResult(exists);
         }
     }
 }

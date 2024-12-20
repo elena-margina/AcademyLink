@@ -6,5 +6,6 @@ namespace AcademyLink.Application.Contracts.Persistence
     {
         Task<bool> IsStudentNameAndEmailUnique(string studentName, string email);
         Task<bool> IsStudentNameAndEmailUnique(int studentId, string studentName, string email);
+        Task<bool> StudentIsInUseCheck(int studentId);
     }
 }

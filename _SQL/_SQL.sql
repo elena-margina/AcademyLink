@@ -201,7 +201,6 @@ GO
 
 ALTER TABLE [dbo].[StudensEnrolledCourses] WITH CHECK ADD CONSTRAINT [FK_StudensEnrolledCourses_Students_StudentID] FOREIGN KEY([StudentID]) 
 	REFERENCES [dbo].[Students] ([StudentID])
-	ON DELETE CASCADE;
 GO
 ALTER TABLE [dbo].[StudensEnrolledCourses] CHECK CONSTRAINT [FK_StudensEnrolledCourses_Students_StudentID]
 GO
@@ -209,7 +208,6 @@ GO
 
 ALTER TABLE [dbo].[StudensEnrolledCourses] WITH CHECK ADD CONSTRAINT [FK_StudensEnrolledCourses_Courses_CourseID] FOREIGN KEY([CourseID]) 
 	REFERENCES [dbo].[Courses] ([CourseID])
-	ON DELETE CASCADE;
 GO
 ALTER TABLE [dbo].[StudensEnrolledCourses] CHECK CONSTRAINT [FK_StudensEnrolledCourses_Courses_CourseID]
 GO

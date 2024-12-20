@@ -2,6 +2,7 @@
 using AcademyLink.Application.Features.Courses.Commands.DeleteCourse;
 using AcademyLink.Application.Features.Courses.Commands.UpdateCourse;
 using AcademyLink.Application.Features.Courses.Queries.GetCoursesList;
+using Azure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,15 +46,14 @@ namespace AcademyLink.Api.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("{id}/DeleteCourse")]
+        [HttpDelete("DeleteCourse")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<DeleteCourseCommandResponse>> Delete(DeleteCourseCommand deleteCourseCommand)
         {
-            var deleteCourseCommand = new DeleteCourseCommand() { CourseId = id };
-            await _mediator.Send(deleteCourseCommand);
-            return NoContent();
+            var response =  await _mediator.Send(deleteCourseCommand);
+            return Ok(response);
         }
     }
 }

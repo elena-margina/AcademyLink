@@ -1,4 +1,5 @@
-﻿using AcademyLink.Domain.Entities;
+﻿using AcademyLink.Application.Features.Courses.Commands.DeleteCourse;
+using AcademyLink.Domain.Entities;
 
 namespace AcademyLink.Application.Contracts.Persistence
 {
@@ -6,5 +7,6 @@ namespace AcademyLink.Application.Contracts.Persistence
     {
         Task<bool> IsCourseNameUnique(string name);
         Task<bool> IsCourseNameUnique(int courseId, string name);
+        Task<bool> CourseIsInUseCheck(int CourseId);
     }
 }
