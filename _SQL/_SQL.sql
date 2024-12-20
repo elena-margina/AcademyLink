@@ -41,22 +41,6 @@ BEGIN
 END
 Go
 
----- ================================================================================================
----- CREATE SCHEMAS FOR WALLET MODULE
----- ================================================================================================
---IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'wallet')
---BEGIN
---	EXEC('CREATE SCHEMA [wallet]');
---END
---Go
-
----- ================================================================================================
---IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'walletHist')
---BEGIN
---	EXEC('CREATE SCHEMA [walletHist]');
---END
---Go
-
 -- ============================================================================================================================================ 
 -- Drops                                                                                  
 -- ============================================================================================================================================ 
@@ -199,7 +183,7 @@ CREATE TABLE [dbo].[StudensEnrolledCourses](
 	[CourseId]                    [int]				  NOT NULL,
 	[EnrollmentDate]              [datetime2]          NOT NULL,
 	[Progress]                    [decimal](5, 2)     NOT NULL,
-	[Status]                      [nvarchar](50)	  NOT NULL,
+	[Status]                      [int]	              NOT NULL,
 	--[UserID]		              [int]				  NOT NULL,
 	--[D_Modify]				      [datetime2]          NOT NULL,
 	--[Version]                     [int]				  NOT NULL,
@@ -272,13 +256,22 @@ USE [AcademyLink]
 GO
 
 insert into [dbo].[Courses] ([Name],[Description],[SeatsAvailable],[DateFrom],[DateTo],[IsAvailable])
-         values('C# Fundamentals', 'Some description', 1, getdate(), (getdate() + 30), 1)
+         values('C# Fundamentals', 'Some description', 10, getdate(), (getdate() + 30), 1)
 
 insert into [dbo].[Courses] ([Name],[Description],[SeatsAvailable],[DateFrom],[DateTo],[IsAvailable])
-         values('Java Fundamentals', 'Some description', 1, getdate(), (getdate() + 30), 1)
+         values('Java Fundamentals', 'Some description', 3, getdate(), (getdate() + 30), 1)
 
 insert into [dbo].[Courses] ([Name],[Description],[SeatsAvailable],[DateFrom],[DateTo],[IsAvailable])
          values('ASP.NET Core Fundamentals', 'Some description', 1, getdate(), (getdate() + 30), 1)
+
+		 insert into [dbo].[Courses] ([Name],[Description],[SeatsAvailable],[DateFrom],[DateTo],[IsAvailable])
+         values('ASP.NET Core Fundamentals 1', 'Some description', 1, getdate(), (getdate() + 30), 1)
+
+insert into [dbo].[Courses] ([Name],[Description],[SeatsAvailable],[DateFrom],[DateTo],[IsAvailable])
+         values('ASP.NET Core Fundamentals 2', 'Some description', 1, getdate(), (getdate() + 40), 1)
+
+		 insert into [dbo].[Courses] ([Name],[Description],[SeatsAvailable],[DateFrom],[DateTo],[IsAvailable])
+         values('ASP.NET Core Fundamentals 3', 'Some description', 1, getdate(), (getdate() + 40), 1)
 
 INSERT INTO [dbo].[Students]([FirstName],[LastName],[Email],[Phone])
      VALUES('Georgy', 'Petrov', 'g.petrov@gmail.com', '+359887665544')
@@ -296,27 +289,32 @@ declare @StudentID int = (select top 1 StudentID from Students),
 	    @CourseID int = (select top 1 CourseID from Courses)
 
 INSERT INTO [dbo].[StudensEnrolledCourses] ([StudentId],[CourseId],[EnrollmentDate],[Progress],[Status])
-     VALUES (@StudentID, @CourseID, getdate(), 0.00, 'Enrolled')
+     VALUES (@StudentID, @CourseID, getdate(), 0.00, 0)
 
 SELECT @StudentID  = (select top 1 StudentID from Students where StudentID != @StudentID)
-SELECT @CourseID  = (select top 1 CourseID from Courses where CourseID != @CourseID)
+SELECT @CourseID  = (select top 1 CourseID from Courses where [Name] = 'Java Fundamentals')
 
 INSERT INTO [dbo].[StudensEnrolledCourses]
            ([StudentId],[CourseId],[EnrollmentDate],[Progress],[Status])
      VALUES
-           (@StudentID, @CourseID, getdate(), 0.00, 'Enrolled')
+           (@StudentID, @CourseID, getdate(), 0.00, 0)
+
+SELECT @StudentID  = (select top 1 StudentID from Students where StudentID != @StudentID)
+SELECT @CourseID  = (select top 1 CourseID from Courses where [Name] = 'ASP.NET Core Fundamentals 1')
 
 INSERT INTO [dbo].[StudensEnrolledCourses]
            ([StudentId],[CourseId],[EnrollmentDate],[Progress],[Status])
      VALUES
-           (2, 5, getdate()+2, 0.00, 'Enrolled')
+          (@StudentID, @CourseID, getdate(), 0.00, 0)
 
+SELECT @CourseID  = (select top 1 CourseID from Courses where [Name] = 'ASP.NET Core Fundamentals 3')
 INSERT INTO [dbo].[StudensEnrolledCourses]
            ([StudentId],[CourseId],[EnrollmentDate],[Progress],[Status])
      VALUES
-           (2, 3, getdate()+20, 0.00, 'Enrolled')
+         (@StudentID, @CourseID, getdate(), 0.00, 0)
 GO
 
 select * from Students
 select * from Courses
 select * from StudensEnrolledCourses
+
